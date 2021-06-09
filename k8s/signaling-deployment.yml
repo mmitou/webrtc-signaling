@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web
+  name: signaling
 spec:
   selector:
     matchLabels:
-      run: web
+      run: signaling
   replicas: 1
   template:
     metadata:
       labels:
-        run: web
+        run: signaling
     spec:
       containers:
-        - name: web
-          image: gcr.io/webrtc-202106/web:v1
+        - name: signaling
+          image: gcr.io/webrtc-202106/signaling:v1
           ports:
           - containerPort: 80
           imagePullPolicy: Always

@@ -43,7 +43,12 @@ document
 			conn = new RTCPeerConnection({
 				iceServers: [
 					{
-						urls: ["stun:stun.l.google.com:19302"],
+						url: "stun:stun.l.google.com:19302",
+					},
+					{
+						url: "turn:localhost:3478",
+						username: "foo",
+						credential: "bar",
 					},
 				],
 			});

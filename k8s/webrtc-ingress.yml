@@ -9,6 +9,6 @@ metadata:
 spec:
   defaultBackend:
     service:
-      name: web
+      name: signaling
       port:
         number: 80

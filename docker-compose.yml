@@ -5,8 +5,9 @@ services:
     container_name: redis
 
   web:
-    build: ./
-    image: gcr.io/webrtc-202106/web:v1
+    build: ./signaling
+    image: gcr.io/webrtc-202106/signaling:v1
     container_name: web
     ports: 
       - 8080:80
+
