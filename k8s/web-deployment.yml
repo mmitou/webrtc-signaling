@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  selector:
+    matchLabels:
+      run: web
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: web
+    spec:
+      containers:
+        - name: web
+          image: gcr.io/webrtc-202106/web:v1
+          ports:
+          - containerPort: 80
+          imagePullPolicy: Always
+

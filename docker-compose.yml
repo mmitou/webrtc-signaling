@@ -1,0 +1,12 @@
+version: "3"
+services: 
+  redis:
+    image : redis
+    container_name: redis
+
+  web:
+    build: ./
+    image: gcr.io/webrtc-202106/web:v1
+    container_name: web
+    ports: 
+      - 8080:80

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  annotations:
+    beta.cloud.google.com/backend-config: '{"ports": {"80":"websocket-backendconfig"}}'
+spec:
+  selector:
+    run: web
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  type: NodePort
