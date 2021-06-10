@@ -11,4 +11,4 @@ spec:
       protocol: UDP
       name: turn
   type: LoadBalancer
-  loadBalancerIP: 35.213.105.79
+  loadBalancerIP: 34.85.33.64
