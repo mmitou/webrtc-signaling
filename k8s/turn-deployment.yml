@@ -17,7 +17,7 @@ spec:
           image: gcr.io/webrtc-202106/turn:v1
           args:
             - "-public-ip"
-            - 35.213.105.79
+            - 34.85.33.64
             - "-users"
             - "foo=bar"
           ports:
