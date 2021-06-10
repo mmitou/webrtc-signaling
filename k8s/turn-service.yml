@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: turn
+spec:
+  selector:
+    app: turn
+  ports:
+    - port: 3478
+      targetPort: 3478
+      protocol: UDP
+      name: turn
+  type: LoadBalancer
+  loadBalancerIP: 35.213.105.79

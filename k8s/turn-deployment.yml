@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: turn
+spec:
+  selector:
+    matchLabels:
+      app: turn
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: turn
+    spec:
+      containers:
+        - name: turn
+          image: gcr.io/webrtc-202106/turn:v1
+          args:
+            - "-public-ip"
+            - 35.213.105.79
+            - "-users"
+            - "foo=bar"
+          ports:
+            - containerPort: 3478
+          imagePullPolicy: Always

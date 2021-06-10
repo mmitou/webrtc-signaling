@@ -21,6 +21,11 @@ const iceServers =
 				{
 					url: "stun:stun.l.google.com:19302",
 				},
+				{
+					url: "turn:35.213.105.79:3478",
+					username: "foo",
+					credential: "bar",
+				},
 		  ];
 
 let ws = null;
