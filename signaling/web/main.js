@@ -1,5 +1,28 @@
 "use strict";
 
+const wsUrl =
+	location.hostname === "localhost"
+		? `ws://${location.host}/rooms/hello/ws`
+		: `wss://${location.host}/rooms/hello/ws`;
+
+const iceServers =
+	location.hostname === "localhost"
+		? [
+				{
+					url: "stun:stun.l.google.com:19302",
+				},
+				{
+					url: "turn:localhost:3478",
+					username: "foo",
+					credential: "bar",
+				},
+		  ]
+		: [
+				{
+					url: "stun:stun.l.google.com:19302",
+				},
+		  ];
+
 let ws = null;
 let conn = null;
 
@@ -19,11 +42,7 @@ document
 	.addEventListener("click", async (event) => {
 		event.target.disabled = true;
 		try {
-			const url =
-				location.hostname === "localhost"
-					? `ws://${location.host}/rooms/hello/ws`
-					: `wss://${location.host}/rooms/hello/ws`;
-			ws = new WebSocket(url);
+			ws = new WebSocket(wsUrl);
 			ws.addEventListener("open", async () => {
 				console.log("open");
 				document.getElementById("sendOfferButton").disabled = false;
@@ -41,16 +60,7 @@ document
 			localVideo.srcObject = stream;
 
 			conn = new RTCPeerConnection({
-				iceServers: [
-					{
-						url: "stun:stun.l.google.com:19302",
-					},
-					{
-						url: "turn:localhost:3478",
-						username: "foo",
-						credential: "bar",
-					},
-				],
+				iceServers: iceServers,
 			});
 			conn.addEventListener("connectionstatechange", console.log);
 			const candidates = [];
