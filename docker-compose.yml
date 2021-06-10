@@ -4,10 +4,17 @@ services:
     image : redis
     container_name: redis
 
-  web:
+  signaling:
     build: ./signaling
     image: gcr.io/webrtc-202106/signaling:v1
-    container_name: web
+    container_name: signaling
     ports: 
       - 8080:80
 
+  turn:
+    build: ./turn
+    image: gcr.io/webrtc-202106/turn:v1
+    container_name: turn
+    command: -public-ip 127.0.0.1 -users foo=bar
+    ports: 
+      - 3478:3478
