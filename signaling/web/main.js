@@ -5,6 +5,18 @@ const wsUrl =
 		? `ws://${location.host}/rooms/hello/ws`
 		: `wss://${location.host}/rooms/hello/ws`;
 
+const iceServers = [
+	{
+		url: "stun:34.85.33.64:3478",
+	},
+	{
+		url: "turn:34.85.33.64:3478",
+		username: "foo",
+		credential: "bar",
+	},
+];
+
+/*
 const iceServers =
 	location.hostname === "localhost"
 		? [
@@ -12,21 +24,22 @@ const iceServers =
 					url: "stun:stun.l.google.com:19302",
 				},
 				{
-					url: "turn:localhost:3478",
+					url: "turn:34.85.33.64:3478",
 					username: "foo",
 					credential: "bar",
 				},
 		  ]
 		: [
 				{
-					url: "stun:stun.l.google.com:19302",
+					url: "stun:34.85.33.64:3478",
 				},
 				{
-					url: "turn:35.213.105.79:3478",
+					url: "turn:34.85.33.64:3478",
 					username: "foo",
 					credential: "bar",
 				},
 		  ];
+*/
 
 let ws = null;
 let conn = null;
@@ -70,10 +83,19 @@ document
 			conn.addEventListener("connectionstatechange", console.log);
 			const candidates = [];
 			conn.addEventListener("icecandidate", (event) => {
-				if (event.candidate) {
-					console.log("icecandidate", event.candidate);
-					candidates.push(event.candidate);
+				if (event.candidate == null) {
+					return;
 				}
+				if (event.candidate.type !== "relay") {
+					return;
+				}
+				const payload = JSON.stringify({
+					type: "icecandidate",
+					candidate: event.candidate,
+				});
+				console.log("send icecandidate", event.candidate, payload);
+
+				ws.send("*\n" + payload);
 			});
 			conn.addEventListener("icecandidateerror", ({ errorCode, errorText }) => {
 				console.log("icecandidateerror", { errorCode, errorText });
@@ -110,9 +132,8 @@ document
 				}
 
 				const [roomId, from, to, payload] = event.data.split("\n");
-				console.log("onmessage", roomId, from, to);
 				const obj = JSON.parse(payload);
-				console.log(obj);
+				console.log("onmessage", roomId, from, to, payload, obj);
 
 				if (obj.type === "offer") {
 					await conn.setRemoteDescription(obj);
@@ -122,15 +143,10 @@ document
 					ws.send(from + "\n" + JSON.stringify(answer));
 				} else if (obj.type === "answer") {
 					await conn.setRemoteDescription(obj);
-					console.log("recieved answer and send icecandidates", candidates);
-					ws.send(
-						from + "\n" + JSON.stringify({ type: "icecandidate", candidates })
-					);
+					console.log("recieved answer");
 				} else if (obj.type === "icecandidate") {
-					console.log("recieved icecandidates", candidates);
-					for (const candidate of obj.candidates) {
-						await conn.addIceCandidate(candidate);
-					}
+					console.log("recieved icecandidate", obj.candidate);
+					await conn.addIceCandidate(obj.candidate);
 				}
 			});
 		} catch (err) {
