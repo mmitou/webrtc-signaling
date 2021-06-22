@@ -6,13 +6,17 @@
 	<body>
 
 		<div class="video">
-				<video id="localVideo" width="320" height="240" style="border: 1px solid black;" autoplay></video>
-				<video id="remoteVideo" width="320" height="240" style="border: 1px solid black;" autoplay></video>
+				<video id="localVideo" width="320" height="240" style="border: 1px solid black;" autoplay playsinline></video>
+				<video id="remoteVideo" width="320" height="240" style="border: 1px solid black;" autoplay playsinline></video>
 		</div>
 
 		<div class="sdp">
 				<button id="sdpStartButton">open</button>
 				<button id="sendOfferButton" disabled>send offer</button>
+		</div>
+
+		<div class="config">
+			<label>stun/turn server<input id="turnServerAddress" type="text" value="54.199.238.20"> </label>
 		</div>
 
 		<script src="main.js"></script>

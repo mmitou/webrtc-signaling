@@ -5,42 +5,6 @@ const wsUrl =
 		? `ws://${location.host}/rooms/hello/ws`
 		: `wss://${location.host}/rooms/hello/ws`;
 
-const iceServers = [
-	{
-		url: "stun:34.85.33.64:3478",
-	},
-	{
-		url: "turn:34.85.33.64:3478",
-		username: "foo",
-		credential: "bar",
-	},
-];
-
-/*
-const iceServers =
-	location.hostname === "localhost"
-		? [
-				{
-					url: "stun:stun.l.google.com:19302",
-				},
-				{
-					url: "turn:34.85.33.64:3478",
-					username: "foo",
-					credential: "bar",
-				},
-		  ]
-		: [
-				{
-					url: "stun:34.85.33.64:3478",
-				},
-				{
-					url: "turn:34.85.33.64:3478",
-					username: "foo",
-					credential: "bar",
-				},
-		  ];
-*/
-
 let ws = null;
 let conn = null;
 
@@ -77,8 +41,21 @@ document
 			const localVideo = document.getElementById("localVideo");
 			localVideo.srcObject = stream;
 
+			const addr = document.getElementById("turnServerAddress").value;
+
+			const iceServers = [
+				{
+					url: `stun:${addr}:3478`,
+				},
+				{
+					url: `turn:${addr}:3478`,
+					username: "foo",
+					credential: "bar",
+				},
+			];
+
 			conn = new RTCPeerConnection({
-				iceServers: iceServers,
+				iceServers,
 			});
 			conn.addEventListener("connectionstatechange", console.log);
 			const candidates = [];
@@ -86,9 +63,9 @@ document
 				if (event.candidate == null) {
 					return;
 				}
-				if (event.candidate.type !== "relay") {
-					return;
-				}
+				// if (event.candidate.type !== "relay") {
+				// 	return;
+				// }
 				const payload = JSON.stringify({
 					type: "icecandidate",
 					candidate: event.candidate,

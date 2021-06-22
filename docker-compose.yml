@@ -15,6 +15,6 @@ services:
     build: ./turn
     image: gcr.io/webrtc-202106/turn:v1
     container_name: turn
-    command: -public-ip 127.0.0.1 -users foo=bar
+    command: /main -public-ip 127.0.0.1 -users foo=bar
     ports: 
       - 3478:3478

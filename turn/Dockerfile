@@ -11,5 +11,3 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main
 FROM alpine AS runner
 
 COPY --from=builder /build/main /main
-
-ENTRYPOINT ["/main"]
